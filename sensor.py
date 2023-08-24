@@ -58,9 +58,9 @@ class DavisSensor(CoordinatorEntity, Entity):
         self._entity_config = entity_config
         self._state = None
 
-    @property
-    def name(self):
-        return self._entity_config['entity']
+    # @property
+    # def name(self):
+    #     return self._entity_config['entity']
 
     @property
     def unique_id(self):
