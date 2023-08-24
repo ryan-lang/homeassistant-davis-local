@@ -3,7 +3,7 @@ import logging
 import voluptuous as vol
 from homeassistant import config_entries
 from . import async_fetch_data, DOMAIN
-from aqi_algorithms import ALGORITHMS as AQI_ALGORITHMS
+from .aqi_algorithms import ALGORITHMS as AQI_ALGORITHMS
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -27,7 +27,7 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 return self.async_create_entry(title=device_name, data=user_input)
             
         # Dynamically generate the list of supported algorithms
-        supported_algorithms = {v['friendly_name']: k for k, v in ALGORITHMS.items()}
+        supported_algorithms = {v['friendly_name']: k for k, v in AQI_ALGORITHMS.items()}
 
         schema = OrderedDict()
         schema[vol.Required('host', description='Host')] = str

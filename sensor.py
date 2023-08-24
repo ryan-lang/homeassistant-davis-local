@@ -116,7 +116,7 @@ class DavisAQISensor(DavisSensor):
     def state(self):
         conditions = self.coordinator.data.get("data", {}).get("conditions", [])
         condition = find_condition_by_lsid(conditions, self._lsid)
-        aqi_class = AQI_ALGORITHMS.get(self._aqi_algorithm, "EPA_USA")
+        aqi_class = AQI_ALGORITHMS.get(self._aqi_algorithm, "EPA_USA")['class']
         
         if condition:
             pm25 = condition.get("pm_2p5_nowcast", 0)
