@@ -1,0 +1,22 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "data": {
+                    "host": "Host",
+                    "aqi_algorithm": "AQI Algorithm"
+                },
+                "data_description": {
+                    "aqi_algorithm": "for Airlink devices"
+                }
+            }
+        }
+    },
+    "entity": {
+        "sensor": {
+            "temp": {
+                "name": "Temperature"
+            }
+        }
+    }
+}

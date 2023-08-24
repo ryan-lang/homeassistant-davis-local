@@ -17,7 +17,7 @@ _LOGGER = logging.getLogger(__name__)
 
 DATA_STRUCTURE_ENTITIES = {
     6: [
-        {"entity": "temp", "friendly_name": "Temperature", "unit": TEMP_FAHRENHEIT, "icon": "mdi:thermometer", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "temp", "unit": TEMP_FAHRENHEIT, "icon": "mdi:thermometer", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
         {"entity": "hum", "friendly_name": "Humidity", "unit": PERCENTAGE, "icon": "mdi:water-percent", "device_class": "humidity", "state_class": STATE_CLASS_MEASUREMENT},
         {"entity": "dew_point", "friendly_name": "Dew Point", "unit": TEMP_FAHRENHEIT, "icon": "mdi:weather-rainy", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
         {"entity": "wet_bulb", "friendly_name": "Wet Bulb", "unit": TEMP_FAHRENHEIT, "icon": "mdi:water", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
