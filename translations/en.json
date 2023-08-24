@@ -1,0 +1,32 @@
+{
+    "config": {
+        "step": {
+            "user": {
+                "data": {
+                    "host": "Host",
+                    "aqi_algorithm": "AQI Algorithm"
+                },
+                "data_description": {
+                    "aqi_algorithm": "for Airlink devices"
+                }
+            }
+        },
+        "error": {
+            "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+            "unknown": "[%key:common::config_flow::error::unknown%]"
+        },
+        "abort": {
+            "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+        }
+    },
+    "entity": {
+        "sensor": {
+            "temp": {
+                "name": "[%key:component::sensor::entity_component::temperature::name%]"
+            },
+            "hum": {
+                "name": "[%key:component::sensor::entity_component::humidity::name%]"
+            }
+        }
+    }
+}
