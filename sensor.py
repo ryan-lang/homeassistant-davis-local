@@ -36,7 +36,8 @@ class DavisSensor(CoordinatorEntity, Entity):
 
     @property
     def unique_id(self):
-        return f"{self._device_info['identifiers'][0]}_{self._entity_config['entity']}"
+        domain, device_id = next(iter(self._device_info['identifiers']))
+        return f"{device_id}_{self._entity_config['entity']}"
 
     @property
     def name(self):
@@ -74,7 +75,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     device_id = coordinator.data.get("data", {}).get("did", "unknown")
 
     device_info = {
-        "identifiers": [(DOMAIN, device_id)],
+        "identifiers": {(DOMAIN, device_id)},
         "name": device_name,
         "manufacturer": "Davis Instruments",
         # Additional fields can go here
