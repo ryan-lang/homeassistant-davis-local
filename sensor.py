@@ -63,7 +63,7 @@ class DavisSensor(CoordinatorEntity, Entity):
 
     @property
     def name(self):
-        return f"{self._device_info['name']} {self._entity_config['entity']}"
+        return f"{self._device_info['name']} {self._entity_config.get('friendly_name', self._entity_config['entity'])}"
 
     @property
     def state(self):
@@ -116,7 +116,7 @@ class DavisAQISensor(DavisSensor):
     def state(self):
         conditions = self.coordinator.data.get("data", {}).get("conditions", [])
         condition = find_condition_by_lsid(conditions, self._lsid)
-        aqi_class = AQI_ALGORITHMS.get(self._aqi_algorithm, "EPA_USA")['class']
+        aqi_class = AQI_ALGORITHMS.get(self._aqi_algorithm, AQI_ALGORITHMS["EPA_USA"])['class']
         
         if condition:
             pm25 = condition.get("pm_2p5_nowcast", 0)
