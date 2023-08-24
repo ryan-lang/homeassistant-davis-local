@@ -2,6 +2,7 @@ from collections import OrderedDict
 import logging
 import voluptuous as vol
 from homeassistant import config_entries
+
 from . import async_fetch_data, DOMAIN
 from .aqi_algorithms import ALGORITHMS as AQI_ALGORITHMS
 
@@ -30,7 +31,7 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         supported_algorithms = {v['friendly_name']: k for k, v in AQI_ALGORITHMS.items()}
 
         schema = OrderedDict()
-        schema[vol.Required('host', description='Host')] = str
-        schema[vol.Required('aqi_algorithm', description='AQI Algorithm', default='EPA_USA')] = vol.In(supported_algorithms)
+        schema[vol.Required('host')] = str
+        schema[vol.Required('aqi_algorithm', default='EPA_USA')] = vol.In(supported_algorithms)
 
         return self.async_show_form(step_id='user', data_schema=vol.Schema(schema), errors=errors)
