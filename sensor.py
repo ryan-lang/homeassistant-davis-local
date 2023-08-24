@@ -154,6 +154,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 "friendly_name": "Nowcast AQI",
                 "icon": "mdi:air-filter", 
                 "device_class": None, 
+                "unit": "",
                 "state_class": STATE_CLASS_MEASUREMENT}, aqi_algorithm))
 
     async_add_entities(entities)
