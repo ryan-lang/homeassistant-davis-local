@@ -22,7 +22,7 @@
     "entity": {
         "sensor": {
             "temp": {
-                "name": "Temperature"
+                "name": "[%key:component::sensor::entity_component::temperature::name%]"
             }
         }
     }

@@ -49,6 +49,8 @@ def find_condition_by_lsid(conditions, lsid):
     return next((condition for condition in conditions if condition.get('lsid') == lsid), None)
 
 class DavisSensor(CoordinatorEntity, Entity):
+    _attr_has_entity_name = True
+    
     def __init__(self, coordinator, device_info, lsid, entity_config):
         super().__init__(coordinator)
         self._device_info = device_info
@@ -60,10 +62,6 @@ class DavisSensor(CoordinatorEntity, Entity):
     def unique_id(self):
         domain, device_id = next(iter(self._device_info['identifiers']))
         return f"{device_id}_{self._entity_config['entity']}"
-
-    @property
-    def name(self):
-        return f"{self._device_info['name']} {self._entity_config.get('friendly_name', self._entity_config['entity'])}"
 
     @property
     def state(self):
