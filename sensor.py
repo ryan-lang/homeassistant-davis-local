@@ -153,6 +153,11 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         # Airlink (dst = 6) can compute AQI
         if data_structure_type == 6:
             aqi_algorithm = config_entry.data.get('aqi_algorithm', 'EPA_USA')  # Default to EPA_USA
-            entities.append(DavisAQISensor(coordinator, device_info, lsid, {'entity': 'nowcast_aqi'}, aqi_algorithm))
+            entities.append(DavisAQISensor(coordinator, device_info, lsid, {
+                'entity': 'nowcast_aqi',
+                "friendly_name": "Nowcast AQI",
+                "icon": "mdi:air-filter", 
+                "device_class": None, 
+                "state_class": STATE_CLASS_MEASUREMENT}, aqi_algorithm))
 
     async_add_entities(entities)
