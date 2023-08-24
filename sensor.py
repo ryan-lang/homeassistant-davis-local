@@ -72,15 +72,11 @@ class DavisSensor(CoordinatorEntity, Entity):
         return condition.get(self._entity_config['entity']) if condition else None
 
     @property
-    def device_state_attributes(self):
-        attributes = {}
+    def extra_state_attributes(self):
+        attributes = {"lsid": self._lsid}
         conditions = self.coordinator.data.get("data", {}).get("conditions", [])
         condition = find_condition_by_lsid(conditions, self._lsid)
         if condition:
-            lsid = condition.get("lsid", None)
-            if lsid is not None:
-                attributes["lsid"] = lsid
-            
             txid = condition.get("txid", None)
             if txid is not None:
                 attributes["txid"] = txid
