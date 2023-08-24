@@ -1,31 +1,33 @@
+import logging
 from homeassistant.helpers.entity import Entity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.const import (
     TEMP_FAHRENHEIT,
-    PERCENTAGE,
-    DEGREE,
-    CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
+    PERCENTAGE
+    # DEGREE,
+    # CONCENTRATION_MICROGRAMS_PER_CUBIC_METER
 )
 
 from . import DOMAIN
 
-DATA_STRUCTURE_TYPE_6 = {
-    "temp": {"unit": TEMP_FAHRENHEIT, "icon": "mdi:thermometer", "device_class": "temperature"},
-    "hum": {"unit": PERCENTAGE, "icon": "mdi:water-percent", "device_class": "humidity"},
-    "dew_point": {"unit": TEMP_FAHRENHEIT, "icon": "mdi:weather-fog", "device_class": "temperature"},
-    "wet_bulb": {"unit": TEMP_FAHRENHEIT, "icon": "mdi:water", "device_class": "temperature"},
-    "heat_index": {"unit": TEMP_FAHRENHEIT, "icon": "mdi:thermometer-alert", "device_class": "temperature"},
-    "pm_1_last": {"unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None},
-    # Add other entities for data_structure_type 6 here...
+_LOGGER = logging.getLogger(__name__)
+
+DATA_STRUCTURE_ENTITIES = {
+    6: [
+        {"entity": "temp", "unit": TEMP_FAHRENHEIT, "icon": "mdi:thermometer", "device_class": "temperature"},
+        {"entity": "hum", "unit": PERCENTAGE, "icon": "mdi:water-percent", "device_class": "humidity"},
+        {"entity": "dew_point", "unit": TEMP_FAHRENHEIT, "icon": "mdi:weather-rainy", "device_class": "temperature"},
+        # Add more here...
+    ],
+    # Add more data_structure_types here if needed
 }
 
 class DavisSensor(CoordinatorEntity, Entity):
-    def __init__(self, coordinator, device_name, lsid, entity_type, attributes):
+    def __init__(self, coordinator, device_name, lsid, entity_config):
         super().__init__(coordinator)
-        self._name = f"{device_name} {lsid} {entity_type}"
+        self._name = f"{device_name} {lsid} {entity_config['entity']}"
         self._lsid = lsid
-        self._entity_type = entity_type
-        self._attributes = attributes
+        self._entity_config = entity_config
         self._state = None
 
     @property
@@ -34,35 +36,36 @@ class DavisSensor(CoordinatorEntity, Entity):
 
     @property
     def state(self):
-        conditions = [condition for condition in self.coordinator.data.get("data", {}).get("conditions", []) if condition["lsid"] == self._lsid]
-        if conditions:
-            return conditions[0].get(self._entity_type)
-        return None
+        return self.coordinator.data.get("data", {}).get("conditions", [{}])[0].get(self._entity_config['entity'])
 
     @property
     def unit_of_measurement(self):
-        return self._attributes.get("unit")
+        return self._entity_config.get("unit")
 
     @property
     def icon(self):
-        return self._attributes.get("icon")
+        return self._entity_config.get("icon")
 
     @property
     def device_class(self):
-        return self._attributes.get("device_class")
+        return self._entity_config.get("device_class")
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
     coordinator = hass.data[DOMAIN][config_entry.entry_id]
     device_name = config_entry.title
 
+    _LOGGER.debug("Setting up entities for %s", device_name)
+    _LOGGER.debug("Coordinator data: %s", coordinator.data)
+
     entities = []
     for condition in coordinator.data.get("data", {}).get("conditions", []):
         lsid = condition["lsid"]
-        data_structure_type = condition.get("data_structure_type")
+        data_structure_type = condition.get("data_structure_type", 0)
+        
+        _LOGGER.debug("Processing condition with lsid: %s and data_structure_type: %s", lsid, data_structure_type)
 
-        if data_structure_type == 6:  # The type you specified
-            for entity_type, attributes in DATA_STRUCTURE_TYPE_6.items():
-                if entity_type in condition:
-                    entities.append(DavisSensor(coordinator, device_name, lsid, entity_type, attributes))
+        for entity_config in DATA_STRUCTURE_ENTITIES.get(data_structure_type, []):
+            _LOGGER.debug("Creating entity for config: %s", entity_config)
+            entities.append(DavisSensor(coordinator, device_name, lsid, entity_config))
 
     async_add_entities(entities)
