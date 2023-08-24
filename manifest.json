@@ -1,0 +1,13 @@
+{
+    "domain": "davis_instruments",
+    "name": "Davis Instruments",
+    "config_flow": true,
+    "documentation": "https://github.com/yourusername/yourrepository",
+    "requirements": [],
+    "dependencies": [],
+    "codeowners": [
+        "@yourusername"
+    ],
+    "version": "0.1.0",
+    "iot_class": "local_polling"
+}
