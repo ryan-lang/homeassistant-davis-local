@@ -74,7 +74,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     device_id = coordinator.data.get("data", {}).get("did", "unknown")
 
     device_info = {
-        "identifiers": {(DOMAIN, device_id)},
+        "identifiers": [(DOMAIN, device_id)],
         "name": device_name,
         "manufacturer": "Davis Instruments",
         # Additional fields can go here
