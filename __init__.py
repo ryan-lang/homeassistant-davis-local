@@ -39,6 +39,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     )
 
     await coordinator.async_config_entry_first_refresh()
+    
+    if DOMAIN not in hass.data:
+        hass.data[DOMAIN] = {}
 
     hass.data[DOMAIN][entry.entry_id] = coordinator
 
