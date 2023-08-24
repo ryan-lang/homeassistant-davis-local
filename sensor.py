@@ -27,15 +27,15 @@ DATA_STRUCTURE_ENTITIES = {
         {"entity": "pm_10_last", "friendly_name": "PM 10 Last", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
         {"entity": "pm_1", "friendly_name": "PM 1", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
         {"entity": "pm_2p5", "friendly_name": "PM 2.5", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_last_1_hour", "friendly_name": "PM 2.5", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_last_3_hours", "friendly_name": "PM 2.5", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_last_24_hours", "friendly_name": "PM 2.5", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_nowcast", "friendly_name": "PM 2.5", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_2p5_last_1_hour", "friendly_name": "PM 2.5 Last 1 Hour", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_2p5_last_3_hours", "friendly_name": "PM 2.5 Last 3 Hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_2p5_last_24_hours", "friendly_name": "PM 2.5 Last 24 Hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_2p5_nowcast", "friendly_name": "PM 2.5 Nowcast", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
         {"entity": "pm_10", "friendly_name": "PM 10", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_last_1_hour", "friendly_name": "PM 2.5", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_last_3_hours", "friendly_name": "PM 2.5", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_last_24_hours", "friendly_name": "PM 2.5", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_nowcast", "friendly_name": "PM 2.5", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_10_last_1_hour", "friendly_name": "PM 10 Last 1 Hour", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_10_last_3_hours", "friendly_name": "PM 10 Last 3 Hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_10_last_24_hours", "friendly_name": "PM 10 Last 24 Hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_10_nowcast", "friendly_name": "PM 10 Nowcast", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
         {"entity": "last_report_time", "friendly_name": "Last Report Time", "unit": TIME_SECONDS, "icon": "mdi:clock-outline", "device_class": DEVICE_CLASS_TIMESTAMP, "state_class": None},
         {"entity": "pct_pm_data_last_1_hour", "friendly_name": "PM Data Last 1 Hour (%)", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
         {"entity": "pct_pm_data_last_3_hours", "friendly_name": "PM Data Last 3 Hours (%)", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
@@ -133,7 +133,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         "identifiers": {(DOMAIN, device_id)},
         "name": device_name,
         "manufacturer": "Davis Instruments",
-        # Additional fields can go here
+        "configuration_url": f"http://{config_entry.data['host']}/v1/current_conditions",
     }
 
     _LOGGER.debug("Setting up entities for %s", device_name)
