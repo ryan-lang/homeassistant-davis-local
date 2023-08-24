@@ -90,6 +90,10 @@ class DavisSensor(CoordinatorEntity, Entity):
     @property
     def icon(self):
         return self._entity_config.get("icon")
+    
+    @property
+    def translation_key(self):
+        return self._entity_config.get("entity")
 
     @property
     def device_class(self):
