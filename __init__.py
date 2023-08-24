@@ -9,7 +9,6 @@ from homeassistant.helpers import update_coordinator
 
 DOMAIN = "davis_instruments"
 DEFAULT_SCAN_INTERVAL = timedelta(minutes=1)
-PLATFORMS: list[str] = ["sensor"]
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -48,14 +47,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     hass.async_create_task(
         hass.config_entries.async_forward_entry_setup(
-            entry, PLATFORMS
+            entry, "sensor"
         )
     )
 
     return True 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, "sensor")
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
 
