@@ -39,7 +39,6 @@ DATA_STRUCTURE_ENTITIES = {
         {"entity": "wind_dir_scalar_avg_last_10_min", "unit": DEGREE, "icon": "mdi:compass", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
         {"entity": "wind_speed_hi_last_10_min", "unit": UnitOfSpeed.MILES_PER_HOUR, "icon": "mdi:weather-windy", "device_class": SensorDeviceClass.WIND_SPEED, "state_class": STATE_CLASS_MEASUREMENT},
         {"entity": "wind_dir_at_hi_speed_last_10_min", "unit": DEGREE, "icon": "mdi:compass", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "rain_size", "unit": RAIN_COUNT, "icon": "mdi:water", "device_class": SensorDeviceClass.ENUM, "state_class": None},
         {"entity": "rain_rate_last", "unit": RAIN_COUNT_PER_HOUR, "icon": "mdi:water", "device_class": SensorDeviceClass.PRECIPITATION_INTENSITY, "state_class": STATE_CLASS_MEASUREMENT},
         {"entity": "rain_rate_hi", "unit": RAIN_COUNT_PER_HOUR, "icon": "mdi:water", "device_class": SensorDeviceClass.PRECIPITATION_INTENSITY, "state_class": STATE_CLASS_MEASUREMENT},
         {"entity": "rainfall_last_15_min", "unit": RAIN_COUNT, "icon": "mdi:water", "device_class": SensorDeviceClass.PRECIPITATION, "state_class": STATE_CLASS_MEASUREMENT},

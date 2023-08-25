@@ -6,6 +6,9 @@ from homeassistant.const import (
     UnitOfLength,
     UnitOfVolumetricFlux,
 )
+from homeassistant.components.sensor.const import (
+    SensorDeviceClass
+)
 
 from . import DOMAIN
 from .aqi_algorithms import ALGORITHMS as AQI_ALGORITHMS
@@ -177,6 +180,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         data_structure_type = condition.get("data_structure_type", 0)
         lsid_label = config_entry.data.get("lsid_labels", {}).get(lsid, None)
         
+        _LOGGER.debug("config", config_entry.data)
+        _LOGGER.debug("labels %s", config_entry.data.get("lsid_labels", {}))
+
         _LOGGER.debug("Processing condition with lsid: %s (label=%s) and data_structure_type: %s", lsid, lsid_label, data_structure_type)
 
         for entity_config in DATA_STRUCTURE_ENTITIES.get(data_structure_type, []):
@@ -190,7 +196,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 'entity': 'nowcast_aqi',
                 "friendly_name": "Nowcast AQI",
                 "icon": "mdi:air-filter", 
-                "device_class": None, 
+                "device_class": SensorDeviceClass.AQI, 
                 "unit": "",
                 "state_class": STATE_CLASS_MEASUREMENT}, aqi_algorithm))
 
