@@ -62,10 +62,10 @@ class DavisSensor(CoordinatorEntity, Entity):
     def translation_key(self):
         return self._entity_config.get("entity")
 
-    #@property
-    #def name(self):
+    @property
+    def name(self):
         #return None
-        #return self._entity_config['entity']
+        return self._entity_config['entity']
 
     @property
     def unique_id(self):
