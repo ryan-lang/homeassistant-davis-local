@@ -47,6 +47,9 @@
             },
             "hum": {
                 "name": "Humidity"
+            },
+            "uv_index": {
+                "name": "UV Index"
             }
         }
     }

@@ -34,6 +34,7 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 for condition in self.data["data"]["conditions"]:
                     duplicate_structure_types[condition["data_structure_type"]].append(condition["lsid"])
                 self.duplicates = {k: v for k, v in duplicate_structure_types.items() if len(v) > 1}
+                self.labels = {}
 
             except Exception:
                 errors["base"] = "cannot_connect"
