@@ -59,8 +59,12 @@ class DavisSensor(CoordinatorEntity, Entity):
         self._state = None
 
     @property
-    def name(self):
-        return None
+    def translation_key(self):
+        return self._entity_config.get("entity")
+
+    #@property
+    #def name(self):
+        #return None
         #return self._entity_config['entity']
 
     @property

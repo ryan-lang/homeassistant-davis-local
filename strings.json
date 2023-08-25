@@ -22,7 +22,7 @@
     "entity": {
         "sensor": {
             "temp": {
-                "name": "[%key:component::sensor::entity_component::temperature::name%]"
+                "name": "Temperature"
             },
             "hum": {
                 "name": "[%key:component::sensor::entity_component::humidity::name%]"
