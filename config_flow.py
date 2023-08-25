@@ -21,16 +21,31 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self.host = user_input["host"]
             try:
                 self.data = await async_fetch_data(self.host)
-                device_name = self.data["data"]["name"]
+                self.device_name = self.data["data"].get("name")
             except Exception:
                 errors["base"] = "cannot_connect"
             else:
-                await self.async_set_unique_id(device_name)
-                self._abort_if_unique_id_configured()
-
-                return await self.async_step_aqi()
+                if self.device_name:
+                    await self.async_set_unique_id(self.device_name)
+                    self._abort_if_unique_id_configured()
+                    return await self.async_step_aqi()
+                else:
+                    return await self.async_step_device_name()
 
         return self.async_show_form(step_id='user', data_schema=vol.Schema(schema), errors=errors)
+    
+    async def async_step_device_name(self, user_input=None):
+        errors = {}
+        schema = OrderedDict()
+        schema[vol.Required('device_name')] = str
+
+        if user_input is not None:
+            self.device_name = user_input["device_name"]
+            await self.async_set_unique_id(self.device_name)
+            self._abort_if_unique_id_configured()
+            return await self.async_step_aqi()
+
+        return self.async_show_form(step_id='device_name', data_schema=vol.Schema(schema), errors=errors)
     
     async def async_step_aqi(self, user_input=None):
         errors = {}
@@ -46,14 +61,17 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         # Check if any conditions object has data_structure_type = 6
         if any(cond["data_structure_type"] == 6 for cond in self.data["data"]["conditions"]):
             supported_algorithms = {v['friendly_name']: k for k, v in AQI_ALGORITHMS.items()}
-            schema[vol.Required('aqi_algorithm', default='EPA_USA')] = vol.In(supported_algorithms)
+            schema[vol.Optional('aqi_algorithm', default='EPA_USA')] = vol.In(supported_algorithms)  # Make this Optional
 
         if user_input is not None:
             self.aqi_algorithm = user_input.get("aqi_algorithm", None)
             if self.duplicates:
                 return await self.async_step_label()
             else:
-                return self.async_create_entry(title=self.data["data"]["name"], data={"host": self.host, "aqi_algorithm": self.aqi_algorithm})
+                return self.async_create_entry(
+                    title=self.device_name, 
+                    data={"host": self.host, "aqi_algorithm": self.aqi_algorithm}
+                )
 
         return self.async_show_form(step_id='aqi', data_schema=vol.Schema(schema), errors=errors)
 
