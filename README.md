@@ -38,9 +38,19 @@ Sensors returning "null" field values will be assumed to not have that particula
 
 Irrelevant, missing, or duplicate entities should be hidden manually by going to the entity configuration in Home Assistant, and untoggling "Visible."
 
+## Additional documentation
+[Weatherlink API V1 Documentation](https://weatherlink.github.io/weatherlink-live-local-api/)
+
 ## Similar Projects
 
 If you're looking for a cloud-based WeatherLink integration, see the well-supported [Weatherlink Integration](https://github.com/astrandb/weatherlink) by astrandb, from which this project takes inspiration.
+
+## TODO
+- [ ] Figure out how translations can be used with custom LSID labels
+- [ ] UDP real-time data support
+- [ ] Support additional V1 data structures
+- [ ] Support for WeatherLink API V2
+- [ ] Configurable polling rate
 
 ## Disclaimer
 
