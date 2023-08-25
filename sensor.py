@@ -114,8 +114,8 @@ class DavisSensor(CoordinatorEntity, SensorEntity):
         return self._device_info
     
 class DavisAQISensor(DavisSensor):
-    def __init__(self, coordinator, device_info, lsid, entity_config, aqi_algorithm):
-        super().__init__(coordinator, device_info, lsid, entity_config)
+    def __init__(self, coordinator, device_info, lsid, lsid_label, entity_config, aqi_algorithm):
+        super().__init__(coordinator, device_info, lsid, lsid_label, entity_config)
         self._aqi_algorithm = aqi_algorithm
 
     @property
