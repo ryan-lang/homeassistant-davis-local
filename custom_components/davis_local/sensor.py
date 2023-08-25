@@ -1,4 +1,6 @@
 import logging
+from pathlib import Path
+import json
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.components.sensor import STATE_CLASS_MEASUREMENT
@@ -59,6 +61,16 @@ def get_rain_lambda(coordinator, lsid):
     
     return lambda x: x
 
+# TODO: obviously this is dumb, but I haven't been able 
+# to find how to load translations from a custom component,
+# so that an interpolated entity name can still benefit from translations.
+# this seemed like the easiest way to have some drop-in replacement in the future
+def load_sensor_translations():
+    json_file_path = Path(__file__).parent / "translations" / "en.json"
+    with json_file_path.open('r') as f:
+        data = json.load(f)
+    return data.get("entity", {}).get("sensor", {})
+
 class DavisSensor(CoordinatorEntity, SensorEntity):
     _attr_has_entity_name = True
     
@@ -73,9 +85,9 @@ class DavisSensor(CoordinatorEntity, SensorEntity):
     @property
     def name(self):
         if self._lsid_label is None:
-            return self._entity_config.get("entity")
+            return self._entity_config.get("entity_translation")
         else:
-            return f"{self._entity_config.get('entity')} {self._lsid_label}"
+            return f"{self._entity_config.get('entity_translation')} {self._lsid_label}"
     
     @property
     def unique_id(self):
@@ -170,6 +182,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     _LOGGER.debug("Setting up entities for %s", device_name)
     _LOGGER.debug("Coordinator data: %s", coordinator.data)
 
+    sensor_translations = load_sensor_translations()
+
     entities = []
     for condition in coordinator.data.get("data", {}).get("conditions", []):
         lsid = condition["lsid"]
@@ -179,6 +193,9 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         _LOGGER.debug("Processing condition with lsid: %s (label=%s) and data_structure_type: %s", lsid, lsid_label, data_structure_type)
 
         for entity_config in DATA_STRUCTURE_ENTITIES.get(data_structure_type, []):
+
+            entity_config['entity_translation'] = sensor_translations.get(entity_config['entity'], {}).get("name", entity_config['entity'])
+
             _LOGGER.debug("Creating entity for config: %s", entity_config)
             entities.append(DavisSensor(coordinator, device_info, lsid, lsid_label, entity_config))
 

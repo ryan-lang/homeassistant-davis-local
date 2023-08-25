@@ -18,7 +18,16 @@ async def async_fetch_data(host):
         try:
             async with async_timeout.timeout(10):
                 async with session.get(url) as response:
-                    return await response.json()
+                    data = await response.json()
+
+                    # purge any conditions fields with null values
+                    clean_conditions = []
+                    for condition in data['data']['conditions']:
+                        clean_condition = {k: v for k, v in condition.items() if v is not None}
+                        clean_conditions.append(clean_condition)
+                    data['data']['conditions'] = clean_conditions
+
+                    return data
         except aiohttp.ClientError as err:
             _LOGGER.warning("Error fetching data: %s", err)
             raise update_coordinator.UpdateFailed("Error fetching data")
