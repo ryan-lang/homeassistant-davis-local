@@ -44,6 +44,195 @@
         "sensor": {
             "temp": {
                 "name": "Temperature"
+            },
+            "hum": {
+                "name": "Humidity"
+            },
+            "dew_point": {
+                "name": "Dew Point"
+            },
+            "wet_bulb": {
+                "name": "Wet Bulb"
+            },
+            "heat_index": {
+                "name": "Heat Index"
+            },
+            "wind_chill": {
+                "name": "Wind Chill"
+            },
+            "thw_index": {
+                "name": "THW Index"
+            },
+            "thsw_index": {
+                "name": "THSW Index"
+            },
+            "wind_speed_last": {
+                "name": "Wind Speed"
+            },
+            "wind_dir_last": {
+                "name": "Wind Direction"
+            },
+            "wind_speed_avg_last_1_min": {
+                "name": "Wind Speed (1 min avg)"
+            },
+            "wind_dir_scalar_avg_last_1_min": {
+                "name": "Wind Direction (1 min avg)"
+            },
+            "wind_speed_avg_last_2_min": {
+                "name": "Wind Speed (2 min avg)"
+            },
+            "wind_dir_scalar_avg_last_2_min": {
+                "name": "Wind Direction (2 min avg)"
+            },
+            "wind_speed_hi_last_2_min": {
+                "name": "Wind Speed (2 min hi)"
+            },
+            "wind_dir_at_hi_speed_last_2_min": {
+                "name": "Wind Direction (2 min hi)"
+            },
+            "wind_speed_avg_last_10_min": {
+                "name": "Wind Speed (10 min avg)"
+            },
+            "wind_dir_scalar_avg_last_10_min": {
+                "name": "Wind Direction (10 min avg)"
+            },
+            "wind_speed_hi_last_10_min": {
+                "name": "Wind Speed (10 min hi)"
+            },
+            "wind_dir_at_hi_speed_last_10_min": {
+                "name": "Wind Direction (10 min hi)"
+            },
+            "rain_rate_last": {
+                "name": "Rain Rate"
+            },
+            "rain_rate_hi": {
+                "name": "Rain Rate (hi)"
+            },
+            "rainfall_last_15_min": {
+                "name": "Rainfall (15 min)"
+            },
+            "rain_rate_hi_last_15_min": {
+                "name": "Rain Rate (15 min hi)"
+            },
+            "rainfall_last_60_min": {
+                "name": "Rainfall (60 min)"
+            },
+            "rainfall_last_24_hr": {
+                "name": "Rainfall (24 hr)"
+            },
+            "rain_storm": {
+                "name": "Rain Storm"
+            },
+            "rain_storm_start_at": {
+                "name": "Rain Storm Start At"
+            },
+            "solar_rad": {
+                "name": "Solar Radiation"
+            },
+            "uv_index": {
+                "name": "UV Index"
+            },
+            "rx_state": {
+                "name": "Radio Receiver State"
+            },
+            "trans_battery_flag": {
+                "name": "Transmitter Battery Status"
+            },
+            "rainfall_daily": {
+                "name": "Rainfall (Daily)"
+            },
+            "rainfall_monthly": {
+                "name": "Rainfall (Monthly)"
+            },
+            "rainfall_year": {
+                "name": "Rainfall (Year)"
+            },
+            "rain_storm_last": {
+                "name": "Rain Storm (Last)"
+            },
+            "rain_storm_last_start_at": {
+                "name": "Rain Storm Start At (Last)"
+            },
+            "rain_storm_last_end_at": {
+                "name": "Rain Storm End At (Last)"
+            },
+            "bar_sea_level": {
+                "name": "Barometric Pressure (Sea Level)"
+            },
+            "bar_trend": {
+                "name": "Barometric Pressure Trend"
+            },
+            "bar_absolute": {
+                "name": "Barometric Pressure (Absolute)"
+            },
+            "temp_in": {
+                "name": "Temperature (Inside)"
+            },
+            "hum_in": {
+                "name": "Humidity (Inside)"
+            },
+            "dew_point_in": {
+                "name": "Dew Point (Inside)"
+            },
+            "heat_index_in": {
+                "name": "Heat Index (Inside)"
+            },
+            "pm_1_last": {
+                "name": "PM1 (Last)"
+            },
+            "pm_2p5_last": {
+                "name": "PM2.5 (Last)"
+            },
+            "pm_10_last": {
+                "name": "PM10 (Last)"
+            },
+            "pm_1": {
+                "name": "PM1"
+            },
+            "pm_2p5": {
+                "name": "PM2.5"
+            },
+            "pm_2p5_last_1_hour": {
+                "name": "PM2.5 (Last 1 Hour)"
+            },
+            "pm_2p5_last_3_hours": {
+                "name": "PM2.5 (Last 3 Hours)"
+            },
+            "pm_2p5_last_24_hours": {
+                "name": "PM2.5 (Last 24 Hours)"
+            },
+            "pm_2p5_nowcast": {
+                "name": "PM2.5 (Nowcast)"
+            },
+            "pm_10": {
+                "name": "PM10"
+            },
+            "pm_10_last_1_hour": {
+                "name": "PM10 (Last 1 Hour)"
+            },
+            "pm_10_last_3_hours": {
+                "name": "PM10 (Last 3 Hours)"
+            },
+            "pm_10_last_24_hours": {
+                "name": "PM10 (Last 24 Hours)"
+            },
+            "pm_10_nowcast": {
+                "name": "PM10 (Nowcast)"
+            },
+            "last_report_time": {
+                "name": "Last Report Time"
+            },
+            "pct_pm_data_last_1_hour": {
+                "name": "Percent PM Data (Last 1 Hour)"
+            },
+            "pct_pm_data_last_3_hours": {
+                "name": "Percent PM Data (Last 3 Hours)"
+            },
+            "pct_pm_data_nowcast": {
+                "name": "Percent PM Data (Nowcast)"
+            },
+            "pct_pm_data_last_24_hours": {
+                "name": "Percent PM Data (Last 24 Hours)"
             }
         }
     }
