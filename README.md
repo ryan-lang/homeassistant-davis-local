@@ -1,3 +1,5 @@
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
+
 # Davis Instruments Local Integration for Home Assistant
 
 Provides an all-local polling integration for Davis Instruments devices, including WeatherLink and AirLink.
