@@ -1,5 +1,5 @@
 import logging
-from homeassistant.helpers.entity import Entity
+from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.components.sensor import STATE_CLASS_MEASUREMENT
 from homeassistant.const import (
@@ -48,7 +48,7 @@ DATA_STRUCTURE_ENTITIES = {
 def find_condition_by_lsid(conditions, lsid):
     return next((condition for condition in conditions if condition.get('lsid') == lsid), None)
 
-class DavisSensor(CoordinatorEntity, Entity):
+class DavisSensor(CoordinatorEntity, SensorEntity):
     _attr_has_entity_name = True
     
     def __init__(self, coordinator, device_info, lsid, entity_config):
@@ -62,10 +62,10 @@ class DavisSensor(CoordinatorEntity, Entity):
     def translation_key(self):
         return self._entity_config.get("entity")
 
-    @property
-    def name(self):
-        #return None
-        return self._entity_config['entity']
+    # @property
+    # def name(self):
+    #     #return None
+    #     return self._entity_config['entity']
 
     @property
     def unique_id(self):
