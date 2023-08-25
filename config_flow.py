@@ -21,79 +21,97 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self.host = user_input["host"]
             try:
                 self.data = await async_fetch_data(self.host)
+
+                # set device name if provided
                 self.device_name = self.data["data"].get("name")
+
+                # determine if we have any Airlink data
+                self.has_airlink = any(cond["data_structure_type"] == 6 for cond in self.data["data"]["conditions"])
+
+                # determine if we have any duplicate data_structure_types
+                duplicate_structure_types = defaultdict(list)
+                for condition in self.data["data"]["conditions"]:
+                    duplicate_structure_types[condition["data_structure_type"]].append(condition["lsid"])
+                self.duplicates = {k: v for k, v in duplicate_structure_types.items() if len(v) > 1}
+
             except Exception:
                 errors["base"] = "cannot_connect"
             else:
-                if self.device_name:
-                    _LOGGER.debug("Device name provided in fetch data: %s", self.device_name)
-                    await self.async_set_unique_id(self.device_name)
-                    self._abort_if_unique_id_configured()
-                    return await self.async_step_aqi()
-                else:
-                    _LOGGER.debug("Device name not provided in fetch data, prompting user for device name...")
-                    return await self.async_step_device_name()
+                # begin the remaining flow
+                return await self.async_device_name()
 
         return self.async_show_form(step_id='user', data_schema=vol.Schema(schema), errors=errors)
     
-    async def async_step_device_name(self, user_input=None):
-        errors = {}
-        schema = OrderedDict()
-        schema[vol.Required('device_name')] = str
-
-        if user_input is not None:
-            self.device_name = user_input["device_name"]
-            _LOGGER.debug("Device name provided by user: %s", self.device_name)
+    # if device_name is not provided, we display a device_name form
+    # otherwise we move to next step
+    async def async_device_name(self, user_input=None):
+        if self.device_name:
+            _LOGGER.debug("Device name provided in fetch data: %s", self.device_name)
             await self.async_set_unique_id(self.device_name)
             self._abort_if_unique_id_configured()
             return await self.async_step_aqi()
+        else:
+            _LOGGER.debug("Device name not provided in fetch data, prompting user for device name...")
+            errors = {}
+            schema = OrderedDict()
+            schema[vol.Required('device_name')] = str
 
-        return self.async_show_form(step_id='device_name', data_schema=vol.Schema(schema), errors=errors)
+            if user_input is not None:
+                self.device_name = user_input["device_name"]
+                _LOGGER.debug("Device name provided by user: %s", self.device_name)
+                await self.async_set_unique_id(self.device_name)
+                self._abort_if_unique_id_configured()
+                return await self.async_step_aqi()
+
+            return self.async_show_form(step_id='device_name', data_schema=vol.Schema(schema), errors=errors)
     
     async def async_step_aqi(self, user_input=None):
-        errors = {}
-        schema = OrderedDict()
-
-        # Check for duplicate data_structure_types
-        duplicate_structure_types = defaultdict(list)
-        for condition in self.data["data"]["conditions"]:
-            duplicate_structure_types[condition["data_structure_type"]].append(condition["lsid"])
-
-        self.duplicates = {k: v for k, v in duplicate_structure_types.items() if len(v) > 1}
-        _LOGGER.debug("Duplicate data_structure_types: %s", self.duplicates)
-
-        # Check if any conditions object has data_structure_type = 6
-        if any(cond["data_structure_type"] == 6 for cond in self.data["data"]["conditions"]):
+        if not self.has_airlink:
+            _LOGGER.debug("Device does not support AQI, skipping AQI step...")
+            return await self.async_step_lsid_label()
+        else:
             _LOGGER.debug("Device supports AQI, prompting user for AQI algorithm...")
+            errors = {}
+            schema = OrderedDict()
+
             supported_algorithms = {v['friendly_name']: k for k, v in AQI_ALGORITHMS.items()}
             schema[vol.Optional('aqi_algorithm', default='EPA_USA')] = vol.In(supported_algorithms)  # Make this Optional
 
-        if user_input is not None:
-            self.aqi_algorithm = user_input.get("aqi_algorithm", None)
-            if self.duplicates:
-                return await self.async_step_label()
-            else:
-                return self.async_create_entry(
-                    title=self.device_name, 
-                    data={"host": self.host, "aqi_algorithm": self.aqi_algorithm}
-                )
+            if user_input is not None:
+                self.aqi_algorithm = user_input.get("aqi_algorithm", None)
+                return await self.async_step_lsid_label()
 
-        return self.async_show_form(step_id='aqi', data_schema=vol.Schema(schema), errors=errors)
+            return self.async_show_form(step_id='aqi', data_schema=vol.Schema(schema), errors=errors)
 
-    async def async_step_label(self, user_input=None):
-        errors = {}
-        schema = OrderedDict()
+    async def async_step_lsid_label(self, user_input=None):
+        if len(self.duplicates) == 0:
+            _LOGGER.debug("No duplicate data_structure_types, skipping LSID label step...")
+            return await self.async_complete_flow()
+        else:
+            _LOGGER.debug("Duplicate data_structure_types detected, prompting user for LSID labels...")
+            errors = {}
+            schema = OrderedDict()
 
-        # Generate schema fields for duplicates
-        for data_structure_type, lsids in self.duplicates.items():
-            for lsid in lsids:
-                schema[vol.Required(f"label_{lsid}", default=f"Sensor {lsid}")] = str
+            # Generate schema fields for duplicates
+            for data_structure_type, lsids in self.duplicates.items():
+                for lsid in lsids:
+                    schema[vol.Required(f"label_{lsid}", default=f"Sensor {lsid}")] = str
 
-        if user_input is not None:
-            labels = {key.replace("label_", ""): value for key, value in user_input.items()}
-            return self.async_create_entry(
-                title=self.data["data"]["name"],
-                data={"host": self.host, "aqi_algorithm": self.aqi_algorithm, "labels": labels}
-            )
+            if user_input is not None:
+                self.labels = {key.replace("label_", ""): value for key, value in user_input.items()}
 
-        return self.async_show_form(step_id='label', data_schema=vol.Schema(schema), errors=errors)
+            return self.async_show_form(step_id='lsid_label', data_schema=vol.Schema(schema), errors=errors)
+
+    async def async_complete_flow(self):
+        return self.async_create_entry(
+            title=self.device_name,
+            data={
+                "host": self.host, 
+                "aqi_algorithm": self.aqi_algorithm, 
+                "labels": self.labels
+            }
+        )
+
+        
+
+            
