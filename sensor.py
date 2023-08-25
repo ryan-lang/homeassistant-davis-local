@@ -75,7 +75,7 @@ class DavisSensor(CoordinatorEntity, SensorEntity):
         if self._lsid_label is None:
             return self._entity_config.get("entity")
         else:
-            return f"{self._lsid_label} {self._entity_config.get('entity')}"
+            return f"{self._entity_config.get('entity')} {self._lsid_label}"
 
     @property
     def translation_key(self):
@@ -179,11 +179,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
         lsid = condition["lsid"]
         data_structure_type = condition.get("data_structure_type", 0)
         lsid_label = config_entry.data.get("lsid_labels", {}).get(str(lsid), None)
-        
-        for key in config_entry.data.get("lsid_labels", {}):
-            _LOGGER.debug("type: %s", type(key))
-
-        _LOGGER.debug("lsid type: %s", type(lsid))
 
         _LOGGER.debug("Processing condition with lsid: %s (label=%s) and data_structure_type: %s", lsid, lsid_label, data_structure_type)
 
