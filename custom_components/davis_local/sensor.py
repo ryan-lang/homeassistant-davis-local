@@ -194,10 +194,14 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
         for entity_config in DATA_STRUCTURE_ENTITIES.get(data_structure_type, []):
 
-            entity_config['entity_translation'] = sensor_translations.get(entity_config['entity'], {}).get("name", entity_config['entity'])
+            # validate that the entity has a value in our payload before initializing
+            if entity_config['entity'] not in condition:
+                _LOGGER.debug("Skipping entity %s because it is not present in the payload for lsid %s", entity_config['entity'], lsid)
+            else:
+                entity_config['entity_translation'] = sensor_translations.get(entity_config['entity'], {}).get("name", entity_config['entity'])
 
-            _LOGGER.debug("Creating entity for config: %s", entity_config)
-            entities.append(DavisSensor(coordinator, device_info, lsid, lsid_label, entity_config))
+                _LOGGER.debug("Creating entity for config: %s", entity_config)
+                entities.append(DavisSensor(coordinator, device_info, lsid, lsid_label, entity_config))
 
         # Airlink (dst = 6) can compute AQI
         if data_structure_type == 6:

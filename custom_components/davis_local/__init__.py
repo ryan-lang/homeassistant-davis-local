@@ -27,8 +27,6 @@ async def async_fetch_data(host):
                         clean_conditions.append(clean_condition)
                     data['data']['conditions'] = clean_conditions
 
-                    _LOGGER.debug("Fetched & cleaned data: %s", data)
-
                     return data
         except aiohttp.ClientError as err:
             _LOGGER.warning("Error fetching data: %s", err)
