@@ -3,50 +3,58 @@ from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.components.sensor import STATE_CLASS_MEASUREMENT
 from homeassistant.const import (
-    TEMP_FAHRENHEIT,
-    PERCENTAGE,
-    CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
-    TIME_SECONDS,
-    DEVICE_CLASS_TIMESTAMP
+    UnitOfLength,
+    UnitOfVolumetricFlux,
 )
 
 from . import DOMAIN
 from .aqi_algorithms import ALGORITHMS as AQI_ALGORITHMS
+from .data_structure_types import (
+    RAIN_COUNT,
+    RAIN_COUNT_PER_HOUR,
+    DATA_STRUCTURE_ENTITIES
+)
 
 _LOGGER = logging.getLogger(__name__)
 
-DATA_STRUCTURE_ENTITIES = {
-    6: [
-        {"entity": "temp", "unit": TEMP_FAHRENHEIT, "icon": "mdi:thermometer", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "hum", "unit": PERCENTAGE, "icon": "mdi:water-percent", "device_class": "humidity", "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "dew_point", "unit": TEMP_FAHRENHEIT, "icon": "mdi:weather-rainy", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "wet_bulb", "unit": TEMP_FAHRENHEIT, "icon": "mdi:water", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "heat_index", "unit": TEMP_FAHRENHEIT, "icon": "mdi:weather-sunny", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_1_last", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_last", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_last", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_1", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_last_1_hour", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_last_3_hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_last_24_hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_nowcast", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_last_1_hour", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_last_3_hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_last_24_hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_nowcast", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "last_report_time", "unit": TIME_SECONDS, "icon": "mdi:clock-outline", "device_class": DEVICE_CLASS_TIMESTAMP, "state_class": None},
-        {"entity": "pct_pm_data_last_1_hour", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pct_pm_data_last_3_hours", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pct_pm_data_nowcast", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pct_pm_data_last_24_hours", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-    ],
-    # Add more data_structure_types here if needed
-}
-
 def find_condition_by_lsid(conditions, lsid):
     return next((condition for condition in conditions if condition.get('lsid') == lsid), None)
+
+def find_rain_size_by_lsid(conditions, lsid):
+    condition = find_condition_by_lsid(conditions, lsid)
+    if condition:
+        return condition.get("rain_size", None)
+    return None
+
+def get_rain_unit(coordinator, lsid, unit):
+    conditions = coordinator.data.get("data", {}).get("conditions", [])
+    rain_size = find_rain_size_by_lsid(conditions, lsid)
+    if rain_size == 1 or rain_size == 4:
+        if unit == RAIN_COUNT_PER_HOUR:
+            return UnitOfVolumetricFlux.INCHES_PER_HOUR
+        elif unit == RAIN_COUNT:
+            return UnitOfLength.INCHES
+    elif rain_size == 2 or rain_size == 3:
+        if unit == RAIN_COUNT_PER_HOUR:
+            return UnitOfVolumetricFlux.MILLIMETERS_PER_HOUR
+        elif unit == RAIN_COUNT:
+            return UnitOfLength.MILLIMETERS
+    
+    return None
+
+def get_rain_lambda(coordinator, lsid):
+    conditions = coordinator.data.get("data", {}).get("conditions", [])
+    rain_size = find_rain_size_by_lsid(conditions, lsid)
+    if rain_size == 1:
+        return lambda x: x * 0.01
+    elif rain_size == 2:
+        return lambda x: x * 0.2
+    elif rain_size == 3:
+        return lambda x: x * 0.1
+    elif rain_size == 4:
+        return lambda x: x * 0.001
+    
+    return lambda x: x
 
 class DavisSensor(CoordinatorEntity, SensorEntity):
     _attr_has_entity_name = True
@@ -92,10 +100,28 @@ class DavisSensor(CoordinatorEntity, SensorEntity):
                 attributes["txid"] = txid
 
         return attributes
+    
+    @property
+    def native_value(self):
+        unit = self._entity_config.get("unit")
+
+        # special unit handling for rain, where units are
+        # specified in the rain_size field
+        if unit == RAIN_COUNT_PER_HOUR or unit == RAIN_COUNT:
+            return get_rain_lambda(self.coordinator, self._lsid)(self.state)
+        else:
+            return self.state
 
     @property
     def unit_of_measurement(self):
-        return self._entity_config.get("unit")
+        unit = self._entity_config.get("unit")
+
+        # special unit handling for rain, where units are
+        # specified in the rain_size field
+        if unit == RAIN_COUNT_PER_HOUR or unit == RAIN_COUNT:
+            return get_rain_unit(self.coordinator, self._lsid, unit)
+        else:
+            return unit
 
     @property
     def icon(self):
