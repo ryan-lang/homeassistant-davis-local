@@ -26,10 +26,12 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 errors["base"] = "cannot_connect"
             else:
                 if self.device_name:
+                    _LOGGER.debug("Device name provided in fetch data: %s", self.device_name)
                     await self.async_set_unique_id(self.device_name)
                     self._abort_if_unique_id_configured()
                     return await self.async_step_aqi()
                 else:
+                    _LOGGER.debug("Device name not provided in fetch data, prompting user for device name...")
                     return await self.async_step_device_name()
 
         return self.async_show_form(step_id='user', data_schema=vol.Schema(schema), errors=errors)
@@ -41,6 +43,7 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             self.device_name = user_input["device_name"]
+            _LOGGER.debug("Device name provided by user: %s", self.device_name)
             await self.async_set_unique_id(self.device_name)
             self._abort_if_unique_id_configured()
             return await self.async_step_aqi()
@@ -57,9 +60,11 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             duplicate_structure_types[condition["data_structure_type"]].append(condition["lsid"])
 
         self.duplicates = {k: v for k, v in duplicate_structure_types.items() if len(v) > 1}
+        _LOGGER.debug("Duplicate data_structure_types: %s", self.duplicates)
 
         # Check if any conditions object has data_structure_type = 6
         if any(cond["data_structure_type"] == 6 for cond in self.data["data"]["conditions"]):
+            _LOGGER.debug("Device supports AQI, prompting user for AQI algorithm...")
             supported_algorithms = {v['friendly_name']: k for k, v in AQI_ALGORITHMS.items()}
             schema[vol.Optional('aqi_algorithm', default='EPA_USA')] = vol.In(supported_algorithms)  # Make this Optional
 
