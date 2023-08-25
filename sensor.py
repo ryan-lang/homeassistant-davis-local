@@ -178,10 +178,12 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     for condition in coordinator.data.get("data", {}).get("conditions", []):
         lsid = condition["lsid"]
         data_structure_type = condition.get("data_structure_type", 0)
-        lsid_label = config_entry.data.get("lsid_labels", {}).get(lsid, None)
+        lsid_label = config_entry.data.get("lsid_labels", {}).get(str(lsid), None)
         
-        _LOGGER.debug("config", config_entry.data)
-        _LOGGER.debug("labels %s", config_entry.data.get("lsid_labels", {}))
+        for key in config_entry.data.get("lsid_labels", {}):
+            _LOGGER.debug("type: %s", type(key))
+
+        _LOGGER.debug("lsid type: %s", type(lsid))
 
         _LOGGER.debug("Processing condition with lsid: %s (label=%s) and data_structure_type: %s", lsid, lsid_label, data_structure_type)
 
