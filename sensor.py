@@ -70,16 +70,16 @@ class DavisSensor(CoordinatorEntity, SensorEntity):
         self._entity_config = entity_config
         self._state = None
 
-    # @property
-    # def name(self):
-    #     if self._lsid_label is None:
-    #         return self._entity_config.get("entity")
-    #     else:
-    #         return f"{self._entity_config.get('entity')} {self._lsid_label}"
-
     @property
-    def translation_key(self):
-        return self._entity_config.get("entity")
+    def name(self):
+        if self._lsid_label is None:
+            return self._entity_config.get("entity")
+        else:
+            return f"{self._entity_config.get('entity')} {self._lsid_label}"
+
+    # @property
+    # def translation_key(self):
+    #     return self._entity_config.get("entity")
     
     @property
     def unique_id(self):
