@@ -34,7 +34,13 @@ class EPA_USA(AQICalculator):
     def calculate(self, pm25, pm10):
         aqi_pm25 = self.calculate_aqi(pm25, self.EPA_USA_BREAKPOINTS_PM25)
         aqi_pm10 = self.calculate_aqi(pm10, self.EPA_USA_BREAKPOINTS_PM10)
-        return max(aqi_pm25, aqi_pm10)
+
+        if aqi_pm25 is None:
+            return aqi_pm10
+        elif aqi_pm10 is None:
+            return aqi_pm25
+        else:
+            return max(aqi_pm25, aqi_pm10)
 
 # class Canada_Health(AQICalculator):
 #     def calculate(self, pm25, pm10):
