@@ -1,14 +1,14 @@
 {
-    "domain": "davis_instruments",
-    "name": "Davis Instruments",
+    "domain": "davis_local",
+    "name": "Davis Local",
     "config_flow": true,
-    "documentation": "https://github.com/ryan-lang/homeassistant-davis",
+    "documentation": "https://github.com/ryan-lang/homeassistant-davis-local",
     "requirements": [],
     "dependencies": [],
     "codeowners": [
         "@ryan-lang"
     ],
     "icon": "assets/icon.png",
-    "version": "0.1.0",
+    "version": "0.0.1",
     "iot_class": "local_polling"
 }

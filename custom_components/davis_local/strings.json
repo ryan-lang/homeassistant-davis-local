@@ -41,16 +41,6 @@
         }
     },
     "entity": {
-        "sensor": {
-            "temp": {
-                "name": "Tenperature"
-            },
-            "hum": {
-                "name": "Humidity"
-            },
-            "uv_index": {
-                "name": "UV Index"
-            }
-        }
+        "sensor": {}
     }
 }
