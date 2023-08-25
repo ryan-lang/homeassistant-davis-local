@@ -51,16 +51,20 @@ def find_condition_by_lsid(conditions, lsid):
 class DavisSensor(CoordinatorEntity, SensorEntity):
     _attr_has_entity_name = True
     
-    def __init__(self, coordinator, device_info, lsid, entity_config):
+    def __init__(self, coordinator, device_info, lsid, lsid_label, entity_config):
         super().__init__(coordinator)
         self._device_info = device_info
         self._lsid = lsid
+        self._lsid_label = lsid_label
         self._entity_config = entity_config
         self._state = None
 
     @property
     def name(self):
-        return self._entity_config.get("entity")
+        if self._lsid_label is None:
+            return self._entity_config.get("entity")
+        else:
+            return f"{self._lsid_label} {self._entity_config.get('entity')}"
 
     @property
     def translation_key(self):
@@ -69,7 +73,7 @@ class DavisSensor(CoordinatorEntity, SensorEntity):
     @property
     def unique_id(self):
         domain, device_id = next(iter(self._device_info['identifiers']))
-        return f"{device_id}_{self._entity_config['entity']}"
+        return f"{device_id}_{self._lsid}_{self._entity_config['entity']}"
 
     @property
     def state(self):
@@ -145,17 +149,18 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     for condition in coordinator.data.get("data", {}).get("conditions", []):
         lsid = condition["lsid"]
         data_structure_type = condition.get("data_structure_type", 0)
+        lsid_label = config_entry.data.get("lsid_labels", {}).get(lsid, None)
         
-        _LOGGER.debug("Processing condition with lsid: %s and data_structure_type: %s", lsid, data_structure_type)
+        _LOGGER.debug("Processing condition with lsid: %s (label=%s) and data_structure_type: %s", lsid, lsid_label, data_structure_type)
 
         for entity_config in DATA_STRUCTURE_ENTITIES.get(data_structure_type, []):
             _LOGGER.debug("Creating entity for config: %s", entity_config)
-            entities.append(DavisSensor(coordinator, device_info, lsid, entity_config))
+            entities.append(DavisSensor(coordinator, device_info, lsid, lsid_label, entity_config))
 
         # Airlink (dst = 6) can compute AQI
         if data_structure_type == 6:
             aqi_algorithm = config_entry.data.get('aqi_algorithm', 'EPA_USA')  # Default to EPA_USA
-            entities.append(DavisAQISensor(coordinator, device_info, lsid, {
+            entities.append(DavisAQISensor(coordinator, device_info, lsid, lsid_label, {
                 'entity': 'nowcast_aqi',
                 "friendly_name": "Nowcast AQI",
                 "icon": "mdi:air-filter", 

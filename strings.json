@@ -3,11 +3,32 @@
         "step": {
             "user": {
                 "data": {
-                    "host": "Host",
+                    "host": "Host"
+                }
+            },
+            "device_name": {
+                "title": "Device configuration",
+                "data": {
+                    "device_name": "Device name"
+                }
+            },
+            "airlink": {
+                "title": "Airlink configuration",
+                "data": {
                     "aqi_algorithm": "AQI Algorithm"
                 },
                 "data_description": {
                     "aqi_algorithm": "for Airlink devices"
+                }
+            },
+            "lsid_labels": {
+                "title": "Multi-sensor setup",
+                "description": "Multiple sensors found on this device that may report similar information.",
+                "data": {
+                    "lsid_labels": "Sensor Labels"
+                },
+                "data_description": {
+                    "lsid_labels": "Provide unique labels for each sensor on this device. Details about what sensors you have added can be found using the WeatherLink App under Account > Devices > [Device Name] > Edit > Stations and Sensors."
                 }
             }
         },

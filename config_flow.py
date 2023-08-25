@@ -27,6 +27,7 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
                 # determine if we have any Airlink data
                 self.has_airlink = any(cond["data_structure_type"] == 6 for cond in self.data["data"]["conditions"])
+                self.aqi_algorithm = None
 
                 # determine if we have any duplicate data_structure_types
                 duplicate_structure_types = defaultdict(list)
@@ -47,18 +48,18 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             _LOGGER.debug("Device name provided in fetch data: %s", self.device_name)
             await self.async_set_unique_id(self.device_name)
             self._abort_if_unique_id_configured()
-            return await self.async_aqi()
+            return await self.async_airlink()
         else:
             _LOGGER.debug("Device name not provided in fetch data, prompting user for device name...")
             return await self.async_step_device_name()
 
-    async def async_aqi(self, user_input=None):
+    async def async_airlink(self, user_input=None):
         if not self.has_airlink:
             _LOGGER.debug("Device does not support AQI, skipping AQI step...")
             return await self.async_lsid_labels()
         else:
             _LOGGER.debug("Device supports AQI, prompting user for AQI algorithm...")
-            return await self.async_step_aqi()
+            return await self.async_step_airlink()
 
     async def async_lsid_labels(self, user_input=None):
         if len(self.duplicates) == 0:
@@ -74,7 +75,7 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             data={
                 "host": self.host, 
                 "aqi_algorithm": self.aqi_algorithm, 
-                "labels": self.labels
+                "lsid_labels": self.labels
             }
         )
     
@@ -88,11 +89,11 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             _LOGGER.debug("Device name provided by user: %s", self.device_name)
             await self.async_set_unique_id(self.device_name)
             self._abort_if_unique_id_configured()
-            return await self.async_aqi()
+            return await self.async_airlink()
 
         return self.async_show_form(step_id='device_name', data_schema=vol.Schema(schema), errors=errors)
 
-    async def async_step_aqi(self, user_input=None):
+    async def async_step_airlink(self, user_input=None):
         errors = {}
         schema = OrderedDict()
 
@@ -103,7 +104,7 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             self.aqi_algorithm = user_input.get("aqi_algorithm", None)
             return await self.async_lsid_labels()
 
-        return self.async_show_form(step_id='aqi', data_schema=vol.Schema(schema), errors=errors)
+        return self.async_show_form(step_id='airlink', data_schema=vol.Schema(schema), errors=errors)
 
     async def async_step_lsid_labels(self, user_input=None):
         errors = {}
