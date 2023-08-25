@@ -1,4 +1,4 @@
-from collections import OrderedDict
+from collections import OrderedDict,defaultdict
 import logging
 import voluptuous as vol
 from homeassistant import config_entries
@@ -14,24 +14,63 @@ class DavisInstrumentsConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_user(self, user_input=None):
         errors = {}
+        schema = OrderedDict()
+        schema[vol.Required('host')] = str
+
         if user_input is not None:
-            host = user_input["host"]
+            self.host = user_input["host"]
             try:
-                data = await async_fetch_data(host)
-                device_name = data["data"]["name"]
+                self.data = await async_fetch_data(self.host)
+                device_name = self.data["data"]["name"]
             except Exception:
                 errors["base"] = "cannot_connect"
             else:
                 await self.async_set_unique_id(device_name)
                 self._abort_if_unique_id_configured()
 
-                return self.async_create_entry(title=device_name, data=user_input)
-            
-        # Dynamically generate the list of supported algorithms
-        supported_algorithms = {v['friendly_name']: k for k, v in AQI_ALGORITHMS.items()}
-
-        schema = OrderedDict()
-        schema[vol.Required('host')] = str
-        schema[vol.Required('aqi_algorithm', default='EPA_USA')] = vol.In(supported_algorithms)
+                return await self.async_step_aqi()
 
         return self.async_show_form(step_id='user', data_schema=vol.Schema(schema), errors=errors)
+    
+    async def async_step_aqi(self, user_input=None):
+        errors = {}
+        schema = OrderedDict()
+
+        # Check for duplicate data_structure_types
+        duplicate_structure_types = defaultdict(list)
+        for condition in self.data["data"]["conditions"]:
+            duplicate_structure_types[condition["data_structure_type"]].append(condition["lsid"])
+
+        self.duplicates = {k: v for k, v in duplicate_structure_types.items() if len(v) > 1}
+
+        # Check if any conditions object has data_structure_type = 6
+        if any(cond["data_structure_type"] == 6 for cond in self.data["data"]["conditions"]):
+            supported_algorithms = {v['friendly_name']: k for k, v in AQI_ALGORITHMS.items()}
+            schema[vol.Required('aqi_algorithm', default='EPA_USA')] = vol.In(supported_algorithms)
+
+        if user_input is not None:
+            self.aqi_algorithm = user_input.get("aqi_algorithm", None)
+            if self.duplicates:
+                return await self.async_step_label()
+            else:
+                return self.async_create_entry(title=self.data["data"]["name"], data={"host": self.host, "aqi_algorithm": self.aqi_algorithm})
+
+        return self.async_show_form(step_id='aqi', data_schema=vol.Schema(schema), errors=errors)
+
+    async def async_step_label(self, user_input=None):
+        errors = {}
+        schema = OrderedDict()
+
+        # Generate schema fields for duplicates
+        for data_structure_type, lsids in self.duplicates.items():
+            for lsid in lsids:
+                schema[vol.Required(f"label_{lsid}", default=f"Sensor {lsid}")] = str
+
+        if user_input is not None:
+            labels = {key.replace("label_", ""): value for key, value in user_input.items()}
+            return self.async_create_entry(
+                title=self.data["data"]["name"],
+                data={"host": self.host, "aqi_algorithm": self.aqi_algorithm, "labels": labels}
+            )
+
+        return self.async_show_form(step_id='label', data_schema=vol.Schema(schema), errors=errors)
