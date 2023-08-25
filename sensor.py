@@ -18,29 +18,29 @@ _LOGGER = logging.getLogger(__name__)
 DATA_STRUCTURE_ENTITIES = {
     6: [
         {"entity": "temp", "unit": TEMP_FAHRENHEIT, "icon": "mdi:thermometer", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "hum", "friendly_name": "Humidity", "unit": PERCENTAGE, "icon": "mdi:water-percent", "device_class": "humidity", "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "dew_point", "friendly_name": "Dew Point", "unit": TEMP_FAHRENHEIT, "icon": "mdi:weather-rainy", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "wet_bulb", "friendly_name": "Wet Bulb", "unit": TEMP_FAHRENHEIT, "icon": "mdi:water", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "heat_index", "friendly_name": "Heat Index", "unit": TEMP_FAHRENHEIT, "icon": "mdi:weather-sunny", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_1_last", "friendly_name": "PM 1 Last", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_last", "friendly_name": "PM 2.5 Last", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_last", "friendly_name": "PM 10 Last", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_1", "friendly_name": "PM 1", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5", "friendly_name": "PM 2.5", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_last_1_hour", "friendly_name": "PM 2.5 Last 1 Hour", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_last_3_hours", "friendly_name": "PM 2.5 Last 3 Hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_last_24_hours", "friendly_name": "PM 2.5 Last 24 Hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_2p5_nowcast", "friendly_name": "PM 2.5 Nowcast", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10", "friendly_name": "PM 10", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_last_1_hour", "friendly_name": "PM 10 Last 1 Hour", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_last_3_hours", "friendly_name": "PM 10 Last 3 Hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_last_24_hours", "friendly_name": "PM 10 Last 24 Hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pm_10_nowcast", "friendly_name": "PM 10 Nowcast", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "last_report_time", "friendly_name": "Last Report Time", "unit": TIME_SECONDS, "icon": "mdi:clock-outline", "device_class": DEVICE_CLASS_TIMESTAMP, "state_class": None},
-        {"entity": "pct_pm_data_last_1_hour", "friendly_name": "PM Data Last 1 Hour (%)", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pct_pm_data_last_3_hours", "friendly_name": "PM Data Last 3 Hours (%)", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pct_pm_data_nowcast", "friendly_name": "PM Data Nowcast (%)", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
-        {"entity": "pct_pm_data_last_24_hours", "friendly_name": "PM Data Last 24 Hours (%)", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "hum", "unit": PERCENTAGE, "icon": "mdi:water-percent", "device_class": "humidity", "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "dew_point", "unit": TEMP_FAHRENHEIT, "icon": "mdi:weather-rainy", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "wet_bulb", "unit": TEMP_FAHRENHEIT, "icon": "mdi:water", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "heat_index", "unit": TEMP_FAHRENHEIT, "icon": "mdi:weather-sunny", "device_class": "temperature", "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_1_last", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_2p5_last", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_10_last", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_1", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_2p5", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_2p5_last_1_hour", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_2p5_last_3_hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_2p5_last_24_hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_2p5_nowcast", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_10", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_10_last_1_hour", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_10_last_3_hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_10_last_24_hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pm_10_nowcast", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "last_report_time", "unit": TIME_SECONDS, "icon": "mdi:clock-outline", "device_class": DEVICE_CLASS_TIMESTAMP, "state_class": None},
+        {"entity": "pct_pm_data_last_1_hour", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pct_pm_data_last_3_hours", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pct_pm_data_nowcast", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
+        {"entity": "pct_pm_data_last_24_hours", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": STATE_CLASS_MEASUREMENT},
     ],
     # Add more data_structure_types here if needed
 }
@@ -61,12 +61,7 @@ class DavisSensor(CoordinatorEntity, SensorEntity):
     @property
     def translation_key(self):
         return self._entity_config.get("entity")
-
-    # @property
-    # def name(self):
-    #     #return None
-    #     return self._entity_config['entity']
-
+    
     @property
     def unique_id(self):
         domain, device_id = next(iter(self._device_info['identifiers']))
@@ -97,10 +92,6 @@ class DavisSensor(CoordinatorEntity, SensorEntity):
     @property
     def icon(self):
         return self._entity_config.get("icon")
-    
-    @property
-    def translation_key(self):
-        return self._entity_config.get("entity")
 
     @property
     def device_class(self):
