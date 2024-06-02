@@ -103,7 +103,7 @@ DATA_STRUCTURE_ENTITIES = {
         {"entity": "pm_10_last_3_hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": SensorDeviceClass.PM10, "state_class": SensorStateClass.MEASUREMENT},
         {"entity": "pm_10_last_24_hours", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": SensorDeviceClass.PM10, "state_class": SensorStateClass.MEASUREMENT},
         {"entity": "pm_10_nowcast", "unit": CONCENTRATION_MICROGRAMS_PER_CUBIC_METER, "icon": "mdi:air-filter", "device_class": SensorDeviceClass.PM10, "state_class": SensorStateClass.MEASUREMENT},
-        {"entity": "last_report_time", "unit": UnitOfTime.Seconds, "icon": "mdi:clock-outline", "device_class": SensorDeviceClass.TIMESTAMP, "state_class": None},
+        {"entity": "last_report_time", "unit": UnitOfTime.SECONDS, "icon": "mdi:clock-outline", "device_class": SensorDeviceClass.TIMESTAMP, "state_class": None},
         {"entity": "pct_pm_data_last_1_hour", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": SensorStateClass.MEASUREMENT},
         {"entity": "pct_pm_data_last_3_hours", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": SensorStateClass.MEASUREMENT},
         {"entity": "pct_pm_data_nowcast", "unit": PERCENTAGE, "icon": "mdi:chart-bar", "device_class": None, "state_class": SensorStateClass.MEASUREMENT},

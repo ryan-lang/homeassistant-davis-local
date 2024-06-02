@@ -3,13 +3,15 @@ from pathlib import Path
 import json
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.components.sensor import STATE_CLASS_MEASUREMENT
 from homeassistant.const import (
     UnitOfLength,
     UnitOfVolumetricFlux,
 )
 from homeassistant.components.sensor.const import (
     SensorDeviceClass
+)
+from homeassistant.components.sensor.const import (
+    SensorStateClass
 )
 
 from . import DOMAIN
@@ -212,6 +214,6 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
                 "icon": "mdi:air-filter", 
                 "device_class": SensorDeviceClass.AQI, 
                 "unit": "",
-                "state_class": STATE_CLASS_MEASUREMENT}, aqi_algorithm))
+                "state_class": SensorStateClass.MEASUREMENT}, aqi_algorithm))
 
     async_add_entities(entities)
